@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            background: #f4f4f4;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 250px;
+            background: #333;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            padding-top: 20px;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            padding: 15px;
+            text-align: left;
+            position: relative;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+
+        .sidebar ul li:hover {
+            background: #575757;
+        }
+
+        /* Dropdown Menu */
+        .dropdown-menu {
+            display: none;
+            background: #444;
+            position: absolute;
+            left: 0;
+            top: 100%;
+            width: 100%;
+            padding: 0;
+            z-index: 100;
+        }
+
+        .dropdown-menu li {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .dropdown-menu li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-menu li:hover {
+            background: #575757;
+        }
+
+        /* Show dropdown when active */
+        .dropdown.active .dropdown-menu {
+            display: block;
+        }
+
+        /* Arrow Rotation */
+        .arrow {
+            float: right;
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown.active .arrow {
+            transform: rotate(180deg);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+        }
+
+        .top-nav {
+            background: #333;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <ul>
+            <li><a href="#"> Dashboard</a></li>
+            <li><a href="#"> Orders</a></li>
+
+            <!-- Categories Dropdown -->
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle">Category <span class="arrow">&#9660;</span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'add_category' %}">Add Category</a></li>
+                    <li><a href="{% url 'category_list' %}">List Categories</a></li>
+                </ul>
+            </li>
+
+            <!-- Products Dropdown -->
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle">Products <span class="arrow">&#9660;</span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'add_product' %}">Add Product</a></li>
+                    <li><a href="{% url 'product_list' %}">List Products</a></li>
+                </ul>
+            </li>
+
+            <li><a href="{% url 'admin_logout' %}"> Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="top-nav">
+            <h1>Dashboard</h1>
+        </div>
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dropdowns = document.querySelectorAll('.dropdown');
+
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    this.classList.toggle('active');
+                });
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function () {
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
