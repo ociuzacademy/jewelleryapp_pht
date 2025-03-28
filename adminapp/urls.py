@@ -24,5 +24,4 @@ urlpatterns = [
     path("admin/full-paid-bookings/", admin_full_paid_bookings, name="admin_full_paid_bookings"),
     path("view-feedback/", view_feedback, name="view_feedback"),
     path('view_products/',views.products,name='view_products'),
-    path("sales_report/", sales_report, name="sales_report"),
 ]
