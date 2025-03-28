@@ -1,28 +1,121 @@
-{% extends 'admin_index.html' %}
+{% extends "admin_index.html" %}
 
 {% block content %}
-<br><br>
-<div style="max-width: 800px; margin: auto; padding: 20px; background: #f9f9f9; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border: 1px solid #ddd;">
-    <h2 style="text-align: center; margin-bottom: 20px;">Categories</h2>
+<style>
+    .page-container {
+        max-width: 900px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        font-family: Arial, sans-serif;
+    }
 
-    {% for category in categories %}
-        <div style="border: 2px solid #ccc; padding: 15px; border-radius: 8px; margin-bottom: 20px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-            <strong style="font-size: 18px; display: block; margin-bottom: 10px;">{{ category.name }}</strong>
-            
-            {% if category.picture %}
-                <img src="{{ category.picture.url }}" alt="{{ category.name }}" style="width: 100px; height: auto; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ddd; padding: 2px;">
-            {% endif %}
-            
-            <p style="margin-bottom: 10px; color: #555;">{{ category.description }}</p>
+    h2 {
+        font-size: 26px;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        font-weight: 600;
+        color: #8ea7e9;
+        text-align: center;
+    }
 
-            <!-- Edit & Delete Category Buttons -->
-            <div>
-                <a href="{% url 'edit_category' category.id %}" style="text-decoration: none; background: #28a745; color: white; padding: 7px 12px; border-radius: 5px; border: 1px solid #218838; display: inline-block;">Edit Category</a>
-                <a href="{% url 'delete_category' category.id %}" style="text-decoration: none; background: #dc3545; color: white; padding: 7px 12px; border-radius: 5px; border: 1px solid #c82333; margin-left: 10px; display: inline-block;" onclick="return confirm('Are you sure you want to delete this category?');">Delete Category</a>
-            </div>
-        </div>
-    {% empty %}
-        <p style="text-align: center; color: gray;">No categories available.</p>
-    {% endfor %}
+    .add-btn {
+        display: inline-block;
+        background-color: #6f4ec7;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+    .add-btn:hover {
+        background-color: #6f4ec7;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: #fdfdfd;
+        border: 1px solid #ddd;
+    }
+
+    table th, table td {
+        padding: 12px 15px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    table th {
+        background-color: #8ea7e9;
+        font-weight: bold;
+        color: white;
+        text-transform: uppercase;
+        font-size: 14px;
+    }
+
+    table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    table img {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+
+    table td {
+        color: #555;
+        font-size: 14px;
+    }
+
+    .no-data {
+        text-align: center;
+        padding: 15px;
+        font-style: italic;
+        color: #999;
+    }
+</style>
+
+<div class="page-container">
+    <h2>Category List</h2>
+    
+    <a href="{% url 'add_category' %}" class="add-btn">+ Add New Category</a>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Category Name</th>
+                <th>Subcategories</th>
+                <th>Icon</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+            <tr>
+                <td>{{ category.id }}</td>
+                <td>{{ category.name }}</td>
+                <td>{{ category.subcategories|join:", " }}</td>  
+                <td>
+                    {% if category.icon %}
+                        <img src="{{ category.icon.url }}" alt="Icon">
+                    {% else %}
+                        No Icon
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="no-data">No categories found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}

@@ -1,0 +1,106 @@
+{% extends "admin_index.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">📊 Sales Report and Analytics</h2>
+
+    <!-- Date Filter Form -->
+    <form method="GET" class="mb-4">
+        <div class="row">
+            <div class="col-md-4">
+                <label>Start Date:</label>
+                <input
+                    type="date"
+                    name="start_date"
+                    class="form-control"
+                    value="{{ start_date }}"
+                />
+            </div>
+            <div class="col-md-4">
+                <label>End Date:</label>
+                <input
+                    type="date"
+                    name="end_date"
+                    class="form-control"
+                    value="{{ end_date }}"
+                />
+            </div>
+            <div class="col-md-4 mt-4">
+                <button type="submit" class="btn btn-primary">🔍 Filter</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Summary Section -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="cards shadow-lg p-3 bg-white rounded">
+                <h5>Total Sales</h5>
+                <p class="text-success h4">₹{{ total_sales|floatformat:2 }}</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="cards shadow-lg p-3 bg-white rounded">
+                <h5>Advance Fee Collected</h5>
+                <p class="text-info h4">₹{{ total_advance_fee|floatformat:2 }}</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="cards shadow-lg p-3 bg-white rounded">
+                <h5>Total Orders</h5>
+                <p class="text-primary h4">{{ total_orders }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Breakdown -->
+    <h4 class="mt-4 mb-3">📦 Status-wise Breakdown</h4>
+    <table class="table table-bordered table-hover">
+        <thead class="table-secondary">
+            <tr>
+                <th>Status</th>
+                <th>Number of Orders</th>
+                <th>Total Amount (₹)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in status_summary %}
+            <tr>
+                <td>{{ item.status|title }}</td>
+                <td>{{ item.total_count }}</td>
+                <td>₹{{ item.total_amount|floatformat:2 }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" class="text-center">No data available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Employee-wise Summary -->
+    <h4 class="mt-4 mb-3">👨‍💼 Employee-wise Assignment Summary</h4>
+    <table class="table table-bordered table-hover">
+        <thead class="table-secondary">
+            <tr>
+                <th>Employee Name</th>
+                <th>Number of Orders</th>
+                <th>Total Amount (₹)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in employee_summary %}
+            <tr>
+                <td>{{ item.assigned_employee__name|default:"Unassigned" }}</td>
+                <td>{{ item.total_count }}</td>
+                <td>₹{{ item.total_amount|floatformat:2 }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" class="text-center">No data available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
